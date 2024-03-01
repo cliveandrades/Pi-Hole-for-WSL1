@@ -3,13 +3,9 @@
 IF %ERRORLEVEL% == 0 (ECHO Administrator check passed...) ELSE (ECHO You need to run the Pi-hole installer with administrative rights.  Is User Account Control enabled? && pause && goto ENDSCRIPT)
 POWERSHELL -Command "$WSL = Get-WindowsOptionalFeature -Online -FeatureName 'Microsoft-Windows-Subsystem-Linux' ; if ($WSL.State -eq 'Disabled') {Enable-WindowsOptionalFeature -FeatureName $WSL.FeatureName -Online}"
 SET PORT=60080
-REM START /MIN /WAIT "Check for Open Port" "POWERSHELL" "-COMMAND" "Get-NetTCPConnection -LocalPort 80 > '%TEMP%\PortCheck.tmp'"
-REM FOR /f %%i in ("%TEMP%\PortCheck.tmp") do set SIZE=%%~zi 
-REM IF %SIZE% gtr 0 SET PORT=60080
 :INPUTS
 CLS
 ECHO.-------------------------------- & ECHO. Pi-hole for Windows v.20240228 & ECHO.-------------------------------- & ECHO.
-IF %SIZE% gtr 0 ECHO AdminLTE website will listen on port %PORT% because port 80 is already in use. 
 SET PRGP=%PROGRAMFILES%&SET /P "PRGP=Set Pi-hole install location, or hit enter for default [%PROGRAMFILES%] -> "
 IF %PRGP:~-1%==\ SET PRGP=%PRGP:~0,-1%
 SET PRGF=%PRGP%\Pi-hole
