@@ -104,8 +104,8 @@ RD /S /Q "%PRGF%\PH4WSL1" & %GO% "echo ; echo -n 'Pi-hole Web Admin, ' ; pihole 
 START /WAIT /MIN "Pi-hole Launcher" "%PRGF%\Pi-hole Launcher.cmd"  
 (ECHO.Input Specifications: & ECHO. && ECHO. Location: %PRGF% && ECHO.Interface: %IPF% && ECHO.  Address: %IPC% && ECHO.     Port: %PORT% && ECHO.     Temp: %TEMP% && ECHO.) >  "%PRGF%\logs\Pi-hole install settings.log"
 DIR "%PRGF%" >> "%PRGF%\logs\Pi-hole install settings.log"
-START /MIN "Gravity Monitor" %GO% "while [ ! -f /tmp/done ] ; do sed -i '/gravityTEMPfile=/c\gravityTEMPfile=\/dev\/shm/gravity.db_temp' /opt/pihole/gravity.sh  ; sleep .5 ; done"
-%GO% "apt-get -yqq purge lighttpd ; echo "development-v6" | sudo tee /etc/pihole/ftlbranch ; yes | pihole checkout core development-v6 ; yes | pihole checkout web development-v6 ; yes | pihole checkout ftl new/useWAL; touch /tmp/done; pihole version ; pihole status"
+START /MIN "Gravity Monitor" %GO% "while [ ! -f /tmp/done ] ; do sed -i '/gravityTEMPfile=/c\gravityTEMPfile=\/dev\/shm/gravity.db_temp' /opt/pihole/gravity.sh ; sleep .5 ; done"
+%GO% "apt-get -yqq purge lighttpd ; echo "development-v6" | sudo tee /etc/pihole/ftlbranch ; yes | pihole checkout core development-v6 ; yes | pihole checkout web development-v6 ; touch /tmp/done; pihole version ; pihole status"
 %GO% "sed -i 's/  port = \"8.*/  port = \"60080,[::]:60080,60443s,[::]:60443s\"/g'  /etc/pihole/pihole.toml"
 SET STTR="%PRGF%\Pi-hole Launcher.cmd"
 ECHO.&SCHTASKS /CREATE /RU "%WAI%" /RL HIGHEST /SC ONSTART /TN "Pi-hole for Windows" /TR '%STTR%' /F
