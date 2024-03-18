@@ -105,8 +105,9 @@ START /WAIT /MIN "Pi-hole Launcher" "%PRGF%\Pi-hole Launcher.cmd"
 (ECHO.Input Specifications: & ECHO. && ECHO. Location: %PRGF% && ECHO.Interface: %IPF% && ECHO.  Address: %IPC% && ECHO.     Port: %PORT% && ECHO.     Temp: %TEMP% && ECHO.) >  "%PRGF%\logs\Pi-hole install settings.log"
 DIR "%PRGF%" >> "%PRGF%\logs\Pi-hole install settings.log"
 START /MIN "Gravity Monitor" %GO% "while [ ! -f /tmp/done ] ; do sed -i '/gravityTEMPfile=/c\gravityTEMPfile=\/dev\/shm/gravity.db_temp' /opt/pihole/gravity.sh ; sleep .5 ; done"
-%GO% "apt-get -yqq purge lighttpd ; echo "development-v6" | sudo tee /etc/pihole/ftlbranch ; yes | pihole checkout core development-v6 ; sed -i 's/  useWAL = true/  useWAL = false/g' /etc/pihole/pihole.toml ; yes | pihole checkout web development-v6 ; touch /tmp/done; pihole version ; pihole status"
-%GO% "sed -i 's/  port = \"8.*/  port = \"60080,[::]:60080,60443s,[::]:60443s\"/g'  /etc/pihole/pihole.toml"
+%GO% "apt-get -yqq purge lighttpd *php* --autoremove ; echo "development-v6" | sudo tee /etc/pihole/ftlbranch ; yes | pihole checkout core development-v6"
+%GO% "sed -i 's/  useWAL = true/  useWAL = false/g' /etc/pihole/pihole.toml ; sed -i 's/  port = \"8.*/  port = \"60080,[::]:60080,60443s,[::]:60443s\"/g'  /etc/pihole/pihole.toml"
+%GO% "yes | pihole checkout web development-v6 ; touch /tmp/done; pihole version ; pihole status"
 SET STTR="%PRGF%\Pi-hole Launcher.cmd"
 ECHO.&SCHTASKS /CREATE /RU "%WAI%" /RL HIGHEST /SC ONSTART /TN "Pi-hole for Windows" /TR '%STTR%' /F
 ECHO.&ECHO.  *NOTE* Additional configuration steps are required if you want
